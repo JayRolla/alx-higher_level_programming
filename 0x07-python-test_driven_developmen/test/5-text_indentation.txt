@@ -1,0 +1,27 @@
+>>> text_indentation = __import__('5-text_indentation').text_indentation
+
+# Test case: Text with all three punctuation marks
+>>> text_indentation("Hello. How are you? I'm doing great: Thanks for asking!")
+Hello.
+<BLANKLINE>
+How are you?
+<BLANKLINE>
+I'm doing great:
+<BLANKLINE>
+Thanks for asking!
+<BLANKLINE>
+
+# Test case: Text without any punctuation marks
+>>> text_indentation("Hello World")
+Hello World
+
+# Test case: Raising TypeError when text is not a string
+>>> text_indentation(123)
+Traceback (most recent call last):
+    ...
+TypeError: Text must be a string!
+
+# Test case: Checking the docstring
+>>> print(text_indentation.__doc__)
+    Let's add some line breaks after certain punctuation marks!
+    ...

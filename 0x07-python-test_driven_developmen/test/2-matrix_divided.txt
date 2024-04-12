@@ -1,0 +1,44 @@
+>>> matrix_divided = __import__('2-matrix_divided').matrix_divided
+
+# Test case: Dividing a matrix of integers
+>>> matrix = [[1, 2, 3], [4, 5, 6]]
+>>> matrix_divided(matrix, 3)
+[[0.33, 0.67, 1.0], [1.33, 1.67, 2.0]]
+
+# Test case: Dividing a matrix of floats
+>>> matrix = [[1.5, 2.5], [3.5, 4.5]]
+>>> matrix_divided(matrix, 2)
+[[0.75, 1.25], [1.75, 2.25]]
+
+# Test case: Raising TypeError when matrix is not a list of lists of integers or floats
+>>> matrix = [[1, 2, "3"], [4, 5, 6]]
+>>> matrix_divided(matrix, 3)
+Traceback (most recent call last):
+    ...
+TypeError: matrix must be a matrix (list of lists) of integers/floats
+
+# Test case: Raising TypeError when rows of matrix have different lengths
+>>> matrix = [[1, 2], [3, 4, 5]]
+>>> matrix_divided(matrix, 3)
+Traceback (most recent call last):
+    ...
+TypeError: Each row of the matrix must have the same size
+
+# Test case: Raising TypeError when div is not a number
+>>> matrix = [[1, 2, 3], [4, 5, 6]]
+>>> matrix_divided(matrix, "hello")
+Traceback (most recent call last):
+    ...
+TypeError: div must be a number
+
+# Test case: Raising ZeroDivisionError when div is 0
+>>> matrix = [[1, 2, 3], [4, 5, 6]]
+>>> matrix_divided(matrix, 0)
+Traceback (most recent call last):
+    ...
+ZeroDivisionError: division by zero
+
+# Test case: Checking the docstring
+>>> print(matrix_divided.__doc__)
+    This function divides all elements of a matrix by a number.
+    ...

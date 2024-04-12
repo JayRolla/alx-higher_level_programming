@@ -1,0 +1,33 @@
+>>> print_square = __import__('4-print_square').print_square
+
+# Test case: Printing a square with a positive size
+>>> print_square(4)
+####
+####
+####
+####
+
+# Test case: Printing a square with size 0 (blank line)
+>>> print_square(0)
+<BLANKLINE>
+
+# Test case: Printing a square with size 1
+>>> print_square(1)
+#
+
+# Test case: Raising TypeError when size is not an integer
+>>> print_square(4.5)
+Traceback (most recent call last):
+    ...
+TypeError: Size must be a whole number!
+
+# Test case: Raising ValueError when size is negative
+>>> print_square(-2)
+Traceback (most recent call last):
+    ...
+ValueError: Size can't be negative!
+
+# Test case: Checking the docstring
+>>> print(print_square.__doc__)
+    Let's print a square made of '#' characters!
+    ...
