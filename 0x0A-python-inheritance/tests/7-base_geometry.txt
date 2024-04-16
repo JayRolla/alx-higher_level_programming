@@ -1,5 +1,13 @@
-12
-89
-John
-0
--4
+# Testing attribute addition to a class with no restrictions
+>>> class MyClass:
+...     pass
+...
+>>> obj = MyClass()
+>>> add_attribute(obj, 'name', 'John')
+>>> obj.name
+'John'
+
+# Testing attribute addition to an immutable type
+>>> obj = 89
+>>> add_attribute(obj, 'name', 'John')
+Exception raised: TypeError: can't add new attribute
