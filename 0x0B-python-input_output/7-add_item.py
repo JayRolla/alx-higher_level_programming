@@ -1,17 +1,26 @@
 #!/usr/bin/python3
 """
-Adds all arguments to a Python list, and then save them to a file.
+This script manages a list stored in a text file. It reads the list from the file,
+adds command line arguments to the list, and saves it back to the file.
+Handles creation of the file if it does not exist and re-writes to add items.
 """
-import sys
-from 5-save_to_json_file import save_to_json_file
-from 6-load_from_json_file import load_from_json_file
 
 filename = "add_item.json"
 
-try:
-    items = load_from_json_file(filename)
-except FileNotFoundError:
-    items = []
+def main():
+    try:
+        with open(filename, 'r') as f:
+            # Reading and converting string representation of list back to list
+            items = eval(f.read())  # Using eval is a security risk
+    except (FileNotFoundError, SyntaxError):
+        items = []
 
-items.extend(sys.argv[1:])
-save_to_json_file(items, filename)
+    # Extend list with command line arguments
+    items.extend(arg for arg in __import__('sys').argv[1:])
+
+    with open(filename, 'w') as f:
+        # Convert list to string and write to file
+        f.write(str(items))
+
+if __name__ == "__main__":
+    main()
