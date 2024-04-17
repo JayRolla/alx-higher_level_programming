@@ -1,52 +1,69 @@
 #!/usr/bin/python3
 """
-A script that reads stdin line by line and computes metrics.
-It calculates the total file size and the count of each HTTP status code.
-Handles:
-- Single line logs.
-- Logs with only one type of status code.
-- Logs with up to 10 lines, more than 10 lines, and empty input.
-- Improperly formatted log entries.
-Output statistics every 10 lines or at the end of input.
+Module for log parsing
 """
 
-def print_stats(total_size, status_codes):
-    """Print accumulated log statistics."""
-    print("File size: {}".format(total_size))
-    for status in sorted(status_codes):
-        if status_codes[status] > 0:
-            print("{}: {}".format(status, status_codes[status]))
+status_codes = {
+    '200': 0,
+    '301': 0,
+    '400': 0,
+    '401': 0,
+    '403': 0,
+    '404': 0,
+    '405': 0,
+    '500': 0
+}
+total_size = 0
+line_count = 0
 
-def process_log():
-    """Process logs from standard input."""
-    total_size = 0
-    status_codes = {"200": 0, "301": 0, "400": 0, "401": 0, "403": 0, "404": 0, "405": 0, "500": 0}
-    line_count = 0
+
+def print_stats(signal_received=None, frame=None):
+    """
+    Prints the statistics since the beginning
+    """
+    global total_size, line_count
+
+    print("File size: {:d}".format(total_size))
+    for code, count in sorted(status_codes.items()):
+        if count > 0:
+            print("{:s}: {:d}".format(code, count))
+
+
+def parse_line(line):
+    """
+    Parses a single log line and updates the statistics
+    """
+    global total_size, line_count
 
     try:
-        while True:
-            line = input()
-            if line.strip() == "":
-                continue  # handle empty lines in input
+        parts = line.split()
+        ip_address = parts[0]
+        date = parts[3][1:]
+        status_code = parts[8]
+        file_size = int(parts[9])
 
-            try:
-                parts = line.split()
-                status = parts[-2]
-                size = int(parts[-1])
-                if status in status_codes:
-                    status_codes[status] += 1
-                    total_size += size
-            except (IndexError, ValueError):
-                continue  # handle wrong format lines
+        total_size += file_size
+        status_codes[status_code] += 1
+        line_count += 1
 
-            line_count += 1
-            if line_count % 10 == 0:
-                print_stats(total_size, status_codes)
-    except EOFError:
+        if line_count % 10 == 0:
+            print_stats()
+    except Exception:
         pass
-    finally:
-        if line_count > 0:
-            print_stats(total_size, status_codes)
+
+
+def handle_signal(signal_received, frame):
+    """
+    Handles the CTRL+C signal and prints the final statistics
+    """
+    print_stats()
+    exit(0)
+
 
 if __name__ == "__main__":
-    process_log()
+    try:
+        for line in iter(input, ""):
+            parse_line(line.strip())
+    except KeyboardInterrupt:
+        handle_signal(None, None)
+    print_stats()
